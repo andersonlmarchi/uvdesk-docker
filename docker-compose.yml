@@ -1,0 +1,57 @@
+version: '3.9'
+
+services:
+  app:
+    build: ./app
+    container_name: uvdesk_app
+    volumes:
+      - ./volumes/uvdesk:/var/www/html
+    networks:
+      - uvdesk_network
+    depends_on:
+      - db
+      - redis
+
+  nginx:
+    image: nginx:latest
+    container_name: uvdesk_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./volumes/uvdesk:/var/www/html
+    networks:
+      - uvdesk_network
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8.0
+    container_name: uvdesk_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: uvdesk
+      MYSQL_USER: uvdesk
+      MYSQL_PASSWORD: uvdesk
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+    networks:
+      - uvdesk_network
+
+  redis:
+    image: redis:alpine
+    container_name: uvdesk_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./volumes/redis:/data
+    networks:
+      - uvdesk_network
+
+networks:
+  uvdesk_network:
+    driver: bridge
