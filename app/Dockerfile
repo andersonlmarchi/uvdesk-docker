@@ -7,14 +7,21 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
-    libmcrypt-dev \
     libicu-dev \
     libkrb5-dev \
     libssl-dev \
     zlib1g-dev \
+    libc-client-dev \
     libmemcached-dev \
     libpq-dev \
-    && docker-php-ext-install pdo pdo_mysql mysqli intl zip opcache
+    libmcrypt-dev \
+    libcurl4-openssl-dev \
+    default-mysql-client \
+    && curl -sL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g yarn \
+    && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+    && docker-php-ext-install -j$(nproc) pdo pdo_mysql mysqli intl zip opcache imap
 
 RUN pecl install mailparse \
     && docker-php-ext-enable mailparse
@@ -29,6 +36,9 @@ COPY . /var/www/html
 
 RUN chown -R www-data:www-data /var/www/html
 
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 EXPOSE 9000
 
-CMD ["php-fpm"]
+CMD ["entrypoint.sh"]
