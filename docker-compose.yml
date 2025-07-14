@@ -40,7 +40,7 @@ services:
       MYSQL_USER: uvdesk
       MYSQL_PASSWORD: uvdesk
     ports:
-      - "3308:3306"
+      - "3306:3306"
     volumes:
       - ./volumes/mysql:/var/lib/mysql
     networks:
