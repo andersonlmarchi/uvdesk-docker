@@ -11,7 +11,15 @@ until mysqladmin ping -h "$UV_DATABASE_HOST" --silent; do
 done
 echo "✅ MySQL está pronto!"
 
-cd /var/www/html/community-skeleton
+cd /var/www/html
+
+# Baixar o UVdesk se a pasta community-skeleton não estiver presente
+if [ ! -d /community-skeleton ]; then
+  echo "📥 Baixando UVdesk Community Skeleton..."
+  git clone https://github.com/uvdesk/community-skeleton.git
+fi
+
+cd /community-skeleton
 
 # Evita reexecutar comandos se já estiver instalado
 if [ ! -f vendor/autoload.php ]; then
