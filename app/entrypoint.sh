@@ -19,7 +19,7 @@ if [ ! -d /community-skeleton ]; then
   git clone https://github.com/uvdesk/community-skeleton.git
 fi
 
-cd /community-skeleton
+cd community-skeleton/
 
 # Evita reexecutar comandos se já estiver instalado
 if [ ! -f vendor/autoload.php ]; then
