@@ -56,8 +56,9 @@ http://localhost:8080
 - Senha: `uvdeskpass`
 
 ## Configurar Redis
-Edite `.env` dentro de `volumes/uvdesk/community-skeleton/` e adicione a seguinte linha:
+Edite `.env` dentro de `volumes/uvdesk/community-skeleton/` e adicione as seguintes linhas:
 ```
+DATABASE_URL=mysql://uvdesk:uvdesk@uvdesk_db:3306/uvdesk
 REDIS_URL=redis://uvdesk_redis:6379
 ```
 
